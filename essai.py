@@ -3,12 +3,14 @@
 
 import random
 import math
+import matplotlib.pyplot as plt
+
 
 lamb = 1 #lambda
 mu = 1
 c = 3 #nombre de serveurs
 N = -1 #nombre max dans la file d'attente, -1 si infini
-i = 0 #nombre initial de personnes dans la file
+i = 20 #nombre initial de personnes dans la file
 phi = 0.000000001 #les serveurs tombent en panne suivant une loi exp de taux phi
 r = 1 #temps de réparation des serveurs Exponentiels de taux 1/r
 
@@ -51,7 +53,7 @@ def ajout_elem_tas((a,b,c)) :
         indice_bis = indice / 2
         #print indice
         #print indice_bis
-        print liste_chronologique
+        #print liste_chronologique
         (temps, action, num_serv) = liste_chronologique[indice_bis]
         if (temps <= a) :
             break
@@ -153,9 +155,10 @@ resultats.append((0, N_service, N_attente))
 b = b and (N_service == c-len(serv)-len(serv_bis))
 b_bis = b_bis and (N_service == c-len(serv))
                    
-while (arrivees < 10):
+
+while (arrivees < 200):
     (time, action, num_serv) = min_tas()
-    print action
+    #print action
     if (action == "arrivee") :
         arrivee(time)
         arrivees = arrivees + 1
@@ -168,10 +171,42 @@ while (arrivees < 10):
     resultats.append((time, N_service, N_attente))
     b_bis = b_bis and (N_service == c-len(serv))
     b = b and (N_service == c-len(serv)-len(serv_bis))
-    print b
+    #print b
     #print liste_chronologique
 
 print resultats
 print pertes
 print b
 print b_bis
+
+def print_file(L) :
+    L1 = []
+    L2 = [0]
+
+    for (a,pouet,o) in L:
+        L1.append(a)
+        L1.append(a)
+        L2.append(o)
+        L2.append(o)
+    L1.append(a)
+    plt.plot(L1, L2, '-', lw = 2)
+
+def print_use(L) :
+    L1 = []
+    L2 = [0]
+
+    for (a,o,pouet) in L:
+        L1.append(a)
+        L1.append(a)
+        L2.append(o)
+        L2.append(o)
+    L1.append(a)
+    plt.plot(L1, L2, '-', lw = 2)
+
+
+plt.xlabel("temps")
+plt.ylabel("bleu: nb personne dans la file \nvert: nbre de personne en traitement")
+
+print_file(resultats)
+print_use(resultats)
+plt.show()
